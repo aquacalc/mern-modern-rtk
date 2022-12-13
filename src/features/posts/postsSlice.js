@@ -1,7 +1,4 @@
-import { 
-  createSlice, 
-  nanoid 
-} from "@reduxjs/toolkit";
+import { createSlice, nanoid } from "@reduxjs/toolkit";
 
 import { sub } from "date-fns";
 
@@ -12,12 +9,12 @@ const initialState = [
     content: "I've heard good things. (Anch'io!)",
     date: sub(new Date(), { minutes: 10 }).toISOString(),
     reactions: {
-        thumbsUp: 0,
-        wow: 0,
-        heart: 0,
-        rocket: 0,
-        coffee: 0
-    }
+      thumbsUp: 0,
+      wow: 0,
+      heart: 0,
+      rocket: 0,
+      coffee: 0,
+    },
   },
   {
     id: "2",
@@ -25,12 +22,12 @@ const initialState = [
     content: "The more I say slice, the more I want pizza.",
     date: sub(new Date(), { minutes: 5 }).toISOString(),
     reactions: {
-        thumbsUp: 0,
-        wow: 0,
-        heart: 0,
-        rocket: 0,
-        coffee: 0
-    }
+      thumbsUp: 0,
+      wow: 0,
+      heart: 0,
+      rocket: 0,
+      coffee: 0,
+    },
   },
 ];
 
@@ -51,15 +48,22 @@ const postsSlice = createSlice({
             date: new Date().toISOString(),
             userId,
             reactions: {
-                thumbsUp: 0,
-                wow: 0,
-                heart: 0,
-                rocket: 0,
-                coffee: 0
-            }
+              thumbsUp: 0,
+              wow: 0,
+              heart: 0,
+              rocket: 0,
+              coffee: 0,
+            },
           },
         };
       },
+    },
+    reactionAdded(state, action) {
+      const { postId, reaction } = action.payload;
+      const existingPost = state.find((p) => p.id === postId);
+      if (existingPost) {
+        existingPost.reactions[reaction]++;
+      }
     },
   },
 });
@@ -67,6 +71,6 @@ const postsSlice = createSlice({
 // see: (~25:45) https://www.youtube.com/watch?v=NqzdVN2tyvQ
 export const selectAllPosts = (state) => state.posts;
 
-export const { postAdded } = postsSlice.actions;
+export const { postAdded, reactionAdded } = postsSlice.actions;
 
 export default postsSlice.reducer;
